@@ -10,10 +10,10 @@ packer {
 source "vmware-iso" "ubuntu20-04" {
   iso_url          = "ubuntu-20.04.3-desktop-amd64.iso"
   iso_checksum     = "sha256:5FDEBC435DED46AE99136CA875AFC6F05BDE217BE7DD018E1841924F71DB46B5"
-  ssh_username     = "packer"
-  ssh_password     = "packer"
+  ssh_username     = "devnet"
+  ssh_password     = "devnet"
   ssh_timeout      = "30m"
-  shutdown_command = "shutdown -P now"
+  shutdown_command = "echo 'devnet' | sudo -S shutdown -P now"
   disk_size        = 40000
   # guest_os_type    = "Ubuntu 64-bit"
   vm_name   = "DevNet Expert Candidate VM"
@@ -31,16 +31,32 @@ source "vmware-iso" "ubuntu20-04" {
     "devnet<tab>",
     "devnet<tab>",
     "<tab><tab><enter><wait20>",
-    "<wait15m><enter><wait5><enter>",
-    "<enter>devnet<enter>",
-    "<leftSuper>",
-    "terminal<enter>",
+    "<wait15m><tab><enter><wait5><enter>",
+    "<wait60><enter><wait5>devnet<enter><wait60>",
+    "<leftSuper><wait5>",
+    "terminal<enter><wait5>",
     "sudo -i<enter>",
-    "devnet<enter>",
-    "apt update && apt install openssh-server -y<wait120>"
+    "devnet<enter><wait5>",
+    "apt update && apt install openssh-server -y<enter><wait120>",
+    "echo 'devnet     ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
   ]
 }
 
 build {
   sources = ["sources.vmware-iso.ubuntu20-04"]
+  provisioner "file" {
+    source      = "requirements.txt"
+    destination = "/tmp/requirements.txt"
+  }
+
+  provisioner "shell" {
+    execute_command   = "chmod +x {{ .Path }}; echo 'devnet' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    script            = "bootstrap.sh"
+    pause_before      = "15s"
+    timeout           = "15m"
+    expect_disconnect = true
+  }
+
+  # post-processor "shell-local" { script = "compress.ps1" }
+
 }

@@ -1,0 +1,1 @@
+Compress-Archive -Path .\output-ubuntu20-04\* -DestinationPath .\DevNetExpertCandidateVM.zip
