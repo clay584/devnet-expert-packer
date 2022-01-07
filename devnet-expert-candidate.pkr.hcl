@@ -59,6 +59,10 @@ provisioner "file" {
   destination = "/tmp/nso-installer.bin"
 }
 
+provisioner "file" {
+  source = "requirements.txt"
+  destination = "/tmp/requirements.txt"
+}
 
   provisioner "shell" {
     execute_command   = "chmod +x {{ .Path }}; '{{ .Vars }} {{ .Path }}'"

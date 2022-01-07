@@ -100,6 +100,7 @@ echo "$SUDOPASS" | sudo -S apt install openssh-client -y
 python -m venv ~/venv
 source ~/venv/bin/activate
 pip install -U pip
+mv /tmp/requirements.txt requirements.txt
 pip install -r requirements.txt
 
 # Install Cisco ACI Ansible collection
