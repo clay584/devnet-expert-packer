@@ -2,3 +2,4 @@
 /*.iso
 /packer_cache
 /output-*
+/*.bin

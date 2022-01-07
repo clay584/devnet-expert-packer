@@ -7,6 +7,11 @@ packer {
   }
 }
 
+variables {
+   SUDOPASS = "devnet"
+}
+
+
 source "vmware-iso" "ubuntu20-04" {
   iso_url          = "ubuntu-20.04.3-desktop-amd64.iso"
   iso_checksum     = "sha256:5FDEBC435DED46AE99136CA875AFC6F05BDE217BE7DD018E1841924F71DB46B5"
@@ -49,11 +54,17 @@ build {
     destination = "/tmp/requirements.txt"
   }
 
+provisioner "file" {
+  source = "nso-installer.bin"
+  destination = "/tmp/nso-installer.bin"
+}
+
+
   provisioner "shell" {
-    execute_command   = "chmod +x {{ .Path }}; echo 'devnet' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    execute_command   = "chmod +x {{ .Path }}; '{{ .Vars }} {{ .Path }}'"
     script            = "bootstrap.sh"
     pause_before      = "15s"
-    timeout           = "15m"
+    timeout           = "30m"
     expect_disconnect = true
   }
 
