@@ -8,7 +8,7 @@ packer {
 }
 
 variables {
-   SUDOPASS = "devnet"
+  SUDOPASS = "devnet"
 }
 
 
@@ -54,15 +54,15 @@ build {
     destination = "/tmp/requirements.txt"
   }
 
-provisioner "file" {
-  source = "nso-installer.bin"
-  destination = "/tmp/nso-installer.bin"
-}
+  provisioner "file" {
+    source      = "nso-installer-signed.bin"
+    destination = "/tmp/nso-installer-signed.bin"
+  }
 
-provisioner "file" {
-  source = "requirements.txt"
-  destination = "/tmp/requirements.txt"
-}
+  provisioner "file" {
+    source      = "requirements.txt"
+    destination = "/tmp/requirements.txt"
+  }
 
   provisioner "shell" {
     execute_command   = "chmod +x {{ .Path }}; '{{ .Vars }} {{ .Path }}'"
