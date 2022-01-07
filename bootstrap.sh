@@ -110,5 +110,5 @@ ansible-galaxy collection install cisco.aci:2.1.0
 mv /tmp/nso-installer-signed.bin /home/devnet/Downloads
 cd /home/devnet/Downloads || return
 /bin/sh nso-installer-signed.bin
-find . -name "*installer-signed.bin" -exec mv {} nso-installer.bin \;
+find . -name "*.installer.bin" -exec mv {} nso-installer.bin \;
 /bin/sh nso-installer.bin --local-install ~/nso
